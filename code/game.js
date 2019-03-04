@@ -1,3 +1,20 @@
+var fill_random = (rows,cols) => {
+    let grid = Array(rows).fill().map(() => Array(cols).fill(0));
+    var row;
+    var col;
+
+    for(row = 0; row < rows; row++) {
+        for(col = 0; col < cols; col++) {
+            val = Math.floor((Math.random() * 2) + 1);
+            if(val == 1) {
+                grid[row][col] = 1;
+            }
+        }
+    }
+
+    return grid;
+};
+
 var exists = (row,col,rows,cols) =>
     row < rows && row >= 0 && col < cols && col >= 0;
 
@@ -56,18 +73,35 @@ var update_grid = (grid,rows,cols) => {
     return new_grid;
 };
 
-let rows = 4;
-let cols = 4;
+var draw_grid = (grid,rows,cols) => {
+    var canvas = document.getElementById("my_canvas");
+    var ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, 800, 800);
 
-let grid = Array(rows).fill().map(() => Array(cols).fill(0));
+    var row;
+    var col;
 
-grid[0][0] = 1;
-grid[0][1] = 1;
-grid[0][2] = 1;
-grid[1][0] = 1;
-grid[1][2] = 1;
-grid[2][0] = 1;
-grid[2][1] = 1;
-grid[2][2] = 1;
+    var x = 2;
+    var y = 2;
 
-updated_grid = update_grid(grid,rows,cols);
+    for(row = 0; row < rows; row++) {
+        for(col = 0; col < cols; col++) {
+            if(grid[row][col] == 1) {
+                ctx.fillStyle = "#008000";
+                ctx.fillRect(row * x, col * y, 2,2);
+            }
+        }
+    }
+};
+
+var run = () => {
+    draw_grid(grid,rows,cols);
+    grid = update_grid(grid,rows,cols);
+    requestAnimationFrame(run);
+}
+
+let rows = 400;
+let cols = 400;
+
+let grid = fill_random(rows,cols);
+run();
